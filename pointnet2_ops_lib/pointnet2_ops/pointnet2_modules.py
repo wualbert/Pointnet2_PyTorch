@@ -64,7 +64,7 @@ class _PointnetSAModuleBase(nn.Module):
             )  # (B, C, npoint, nsample)
 
             new_features = self.mlps[i](new_features)  # (B, mlp[-1], npoint, nsample)
-            new_features = F.max_pool2d(
+            new_features = F.avg_pool2d(
                 new_features, kernel_size=[1, new_features.size(3)]
             )  # (B, mlp[-1], npoint, 1)
             new_features = new_features.squeeze(-1)  # (B, mlp[-1], npoint)
@@ -86,7 +86,7 @@ class PointnetSAModuleMSG(_PointnetSAModuleBase):
     nsamples : list of int32
         Number of samples in each ball query
     mlps : list of list of int32
-        Spec of the pointnet before the global max_pool for each scale
+        Spec of the pointnet before the global avg_pool for each scale
     bn : bool
         Use batchnorm
     """
@@ -127,7 +127,7 @@ class PointnetSAModule(PointnetSAModuleMSG):
     nsample : int
         Number of samples in the ball query
     mlp : list
-        Spec of the pointnet before the global max_pool
+        Spec of the pointnet before the global avg_pool
     bn : bool
         Use batchnorm
     """
